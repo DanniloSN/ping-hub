@@ -1,14 +1,22 @@
+import { create, get } from '$lib/server/db';
+import { redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
 export const actions = {
 	default: async (event) => {
 		try {
 			const formData = await event.request.formData();
-			console.log(Object.fromEntries(formData.entries()));
-			// Check if url isn't already in the database
-			// Get favicon from url
-			// Save to the database
-			// Redirect to the home page
+			const objectData = Object.fromEntries(formData.entries());
+
+			const existingItem = get(objectData.url);
+			if (existingItem) throw new Error('URL already exists');
+
+			const url = new URL(objectData.url);
+			const faviconUrl = `${url.origin}/favicon.ico`;
+
+			create({ ...objectData, faviconUrl });
+
+			throw redirect(302, '/');
 		} catch (error) {
 			console.error(error);
 		}
