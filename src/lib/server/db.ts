@@ -10,6 +10,9 @@ export function get(url?: string) {
 	return allItems;
 }
 
-export function update(url: number, data: any) {}
+export function update(url: string, data: any) {}
 
-export function remove(url: number) {}
+export function remove(url: string) {
+	const index = allItems.findIndex((item) => item.url === url);
+	if (index !== -1) allItems.splice(index, 1);
+}
