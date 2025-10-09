@@ -1,11 +1,8 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
-	import Card from '$lib/components/Card.svelte';
-	import Link from '$lib/components/Link.svelte';
-	import { cn } from '$lib/utils';
-	import Icon from '@iconify/svelte';
+	import CardItem from '$lib/components/CardItem.svelte';
 
-	export let data;
+	let { data } = $props();
 
 	async function removeItem(url: string) {
 		const response = await fetch('?/remove', {
@@ -19,29 +16,28 @@
 
 		alert('Item removido com sucesso');
 	}
+
+	async function checkResponseTime() {
+		const newItems = await Promise.all(
+			data.allItems.map(async (item) => {
+				const start = performance.now();
+				await fetch(item.url, { method: 'HEAD', mode: 'no-cors' }).catch((error) => {});
+				const end = performance.now();
+				item.responseTimeInMs = Math.round(end - start);
+				return item;
+			})
+		);
+
+		data.allItems = newItems;
+	}
+
+	$effect(() => {
+		setInterval(checkResponseTime, 10000);
+	});
 </script>
 
 <div class="grid grid-cols-1 gap-2 md:grid-cols-3">
 	{#each data.allItems as item}
-		<Card>
-			<div class="flex items-center justify-between">
-				<img class="h-5 w-5 object-cover" src={item.faviconUrl} alt={`${item.name}'s icon`} />
-				<Link href={item.url} external>
-					<span class="px-2 text-sm font-semibold">{item.name}</span>
-				</Link>
-				<button onclick={() => removeItem(item.url)} class="p-2">
-					<Icon icon="ic:baseline-close" />
-				</button>
-			</div>
-			<div
-				class={cn('mt-4 w-full border-b-4 pb-1 text-center text-xs', {
-					'border-green-600 text-green-600': true,
-					'border-yellow-600 text-yellow-600': false,
-					'border-red-600 text-red-600': false
-				})}
-			>
-				0ms
-			</div>
-		</Card>
+		<CardItem {item} {removeItem} />
 	{/each}
 </div>

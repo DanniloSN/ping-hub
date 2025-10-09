@@ -1,16 +1,28 @@
-const allItems = [];
+export interface Item {
+	id: number;
+	name: string;
+	url: string;
+	faviconUrl: string;
+	responseTimeInMs: number;
+}
 
-export function create(data: any) {
-	const newData = { id: Date.now(), ...data };
+const allItems: Item[] = [];
+
+export function create(data: Omit<Item, 'id'>) {
+	const newData: Item = {
+		...data,
+		id: Date.now(),
+		responseTimeInMs: 0
+	};
 	allItems.push(newData);
 }
 
 export function get(url?: string) {
-	if (url) return allItems.find((item) => item.url === url);
+	if (url) return allItems.filter((item) => item.url === url);
 	return allItems;
 }
 
-export function update(url: string, data: any) {}
+export function update(url: string, data: Omit<Item, 'id'>) {}
 
 export function remove(url: string) {
 	const index = allItems.findIndex((item) => item.url === url);

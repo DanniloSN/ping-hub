@@ -8,7 +8,7 @@ export const actions: Actions = {
 		const objectData = Object.fromEntries(formData.entries());
 
 		const existingItem = get(objectData.url);
-		if (existingItem) throw new Error('URL already exists');
+		if (existingItem.length) throw new Error('URL already exists');
 
 		const url = new URL(objectData.url);
 		const faviconUrl = `${url.origin}/favicon.ico`;
