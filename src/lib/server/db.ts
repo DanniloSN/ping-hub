@@ -3,7 +3,6 @@ export interface Item {
 	name: string;
 	url: string;
 	faviconUrl: string;
-	responseTimeInMs: number;
 }
 
 const allItems: Item[] = [];
@@ -11,8 +10,7 @@ const allItems: Item[] = [];
 export function create(data: Omit<Item, 'id'>) {
 	const newData: Item = {
 		...data,
-		id: Date.now(),
-		responseTimeInMs: 0
+		id: Date.now()
 	};
 	allItems.push(newData);
 }
