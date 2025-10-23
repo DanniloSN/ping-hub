@@ -1,15 +1,14 @@
 <script lang="ts">
-	import type { Item } from '$lib/server/db';
 	import { checkUrlResponseTime, cn } from '$lib/utils';
 	import Icon from '@iconify/svelte';
-	import Card from './Card.svelte';
-	import Link from './Link.svelte';
+	import Card from '../Card.svelte';
+	import Link from '../Link.svelte';
 
-	const { item, removeItem }: { item: Item; removeItem: (url: string) => void } = $props();
+	const { instance, removeItem }: CardItemProps = $props();
 	let responseTimeInMs = $state<number | null>(null);
 
 	async function updateUrlResponseTime() {
-		responseTimeInMs = await checkUrlResponseTime(item.url);
+		responseTimeInMs = await checkUrlResponseTime(instance.url);
 	}
 
 	$effect(() => {
@@ -20,11 +19,11 @@
 
 <Card>
 	<div class="flex items-center justify-between">
-		<img class="h-5 w-5 object-cover" src={item.faviconUrl} alt={`${item.name}'s icon`} />
-		<Link href={item.url} external>
-			<span class="px-2 text-sm font-semibold">{item.name}</span>
+		<img class="h-5 w-5 object-cover" src={instance.favicon} alt={`${instance.name}'s icon`} />
+		<Link href={instance.url} external>
+			<span class="px-2 text-sm font-semibold">{instance.name}</span>
 		</Link>
-		<button onclick={() => removeItem(item.url)} class="p-2">
+		<button onclick={() => removeItem(instance.url)} class="p-2">
 			<Icon icon="ic:baseline-close" />
 		</button>
 	</div>

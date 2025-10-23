@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
-	import CardItem from '$lib/components/CardItem.svelte';
+	import CardItem from '$lib/components/CardItem/index.svelte';
 
 	let { data } = $props();
 
@@ -19,7 +19,7 @@
 </script>
 
 <div class="grid grid-cols-1 gap-2 md:grid-cols-3">
-	{#each data.allItems as item}
-		<CardItem {item} {removeItem} />
+	{#each data.instances as instance}
+		<CardItem {instance} {removeItem} />
 	{/each}
 </div>

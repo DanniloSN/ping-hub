@@ -1,14 +1,25 @@
-import { get, remove } from '$lib/server/db';
+import prisma from '$lib/server/prisma';
 
-export function load() {
-	const allItems = get();
-	return { allItems };
+export async function load() {
+	const instances = await prisma.instance.findMany({
+		select: {
+			id: true,
+			name: true,
+			url: true,
+			favicon: true
+		}
+	});
+
+	return { instances };
 }
 
 export const actions = {
 	remove: async ({ request }) => {
 		const { url } = await request.json();
 		if (!url) throw new Error('Url obrigatória');
-		remove(url);
+
+		await prisma.instance.deleteMany({
+			where: { url }
+		});
 	}
 };
