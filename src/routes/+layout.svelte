@@ -14,7 +14,10 @@
 	<a href="/">
 		<h1 class="text-xl font-bold">Server Hub</h1>
 	</a>
-	<ButtonLink href="/add">+ Adicionar</ButtonLink>
+	<nav class="flex gap-2">
+		<ButtonLink href="/add">+ Adicionar</ButtonLink>
+		<ButtonLink href="/login">Entrar</ButtonLink>
+	</nav>
 </nav>
 <main class="p-6">
 	{@render children?.()}
