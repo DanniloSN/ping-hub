@@ -1,14 +1,31 @@
 import prisma from '$lib/server/prisma';
+import { getLoggedUser } from '$lib/server/utils.js';
 
-export async function load() {
-	const instances = await prisma.instance.findMany({
+export async function load(event) {
+	const loggedUser = await getLoggedUser(event);
+	if (!loggedUser) return { instances: [] };
+
+	const userInstances = await prisma.userInstance.findMany({
 		select: {
 			id: true,
 			name: true,
-			url: true,
-			favicon: true
+			Instance: {
+				select: {
+					url: true,
+					favicon: true
+				}
+			}
+		},
+		where: {
+			userId: loggedUser.id
 		}
 	});
+
+	const instances = userInstances.map(({ Instance, ...item }) => ({
+		...item,
+		url: Instance.url,
+		favicon: Instance.favicon
+	}));
 
 	return { instances };
 }

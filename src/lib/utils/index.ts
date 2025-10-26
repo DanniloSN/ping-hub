@@ -16,3 +16,11 @@ export async function checkUrlResponseTime(url: string) {
 		return null;
 	}
 }
+
+export function generateRandomToken() {
+	return Math.random().toString(36).substring(2);
+}
+
+export function extractNumbers(input: string) {
+	return input.replace(/\D/g, '');
+}

@@ -6,6 +6,6 @@
 	const { children, ...rest } = $props();
 </script>
 
-<Link {...rest} class={cn(theme.button, rest.class)}>
+<Link {...rest} class={cn(theme.button, 'text-center', rest.class)}>
 	{@render children?.()}
 </Link>
