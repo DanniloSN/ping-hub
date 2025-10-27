@@ -1,4 +1,5 @@
 import prisma from '$lib/server/prisma';
+import { getLoggedUser } from '$lib/server/utils';
 import { redirect } from '@sveltejs/kit';
 import z from 'zod';
 import type { Actions } from './$types';
@@ -14,22 +15,42 @@ export const actions: Actions = {
 			})
 			.parse(Object.fromEntries(formData.entries()));
 
-		const existingInstance = await prisma.instance.findFirst({
+		const loggedUser = await getLoggedUser(event);
+
+		let existingInstance = await prisma.instance.findFirst({
 			where: { url }
 		});
-		if (existingInstance) throw new Error('URL already exists');
 
-		const urlObject = new URL(url);
-		const favicon = `${urlObject.origin}/favicon.ico`;
+		if (!existingInstance) {
+			const urlObject = new URL(url);
+			const favicon = `${urlObject.origin}/favicon.ico`;
 
-		await prisma.instance.create({
-			data: {
-				name,
-				url,
-				favicon
+			existingInstance = await prisma.instance.create({
+				data: {
+					url,
+					favicon
+				}
+			});
+		}
+
+		const existingUserInstance = await prisma.userInstance.findFirst({
+			select: { id: true },
+			where: {
+				userId: loggedUser.id,
+				instanceId: existingInstance.id
 			}
 		});
 
-		throw redirect(303, '/');
+		await prisma.userInstance.upsert({
+			where: { id: existingUserInstance?.id ?? 0 },
+			create: {
+				name,
+				userId: loggedUser.id,
+				instanceId: existingInstance.id
+			},
+			update: { name }
+		});
+
+		redirect(302, '/');
 	}
 };

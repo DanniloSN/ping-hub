@@ -3,7 +3,6 @@ import { getLoggedUser } from '$lib/server/utils.js';
 
 export async function load(event) {
 	const loggedUser = await getLoggedUser(event);
-	if (!loggedUser) return { instances: [] };
 
 	const userInstances = await prisma.userInstance.findMany({
 		select: {
@@ -31,12 +30,17 @@ export async function load(event) {
 }
 
 export const actions = {
-	remove: async ({ request }) => {
-		const { url } = await request.json();
+	remove: async (event) => {
+		const { url } = await event.request.json();
 		if (!url) throw new Error('Url obrigatória');
 
-		await prisma.instance.deleteMany({
-			where: { url }
+		const loggedUser = await getLoggedUser(event);
+
+		await prisma.userInstance.deleteMany({
+			where: {
+				userId: loggedUser.id,
+				Instance: { url }
+			}
 		});
 	}
 };

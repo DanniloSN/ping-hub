@@ -30,7 +30,7 @@ model UserInstance {
 
 model Instance {
   id        Int            @id @default(autoincrement())
-  url       String         @unique
+  url       String         @unique @db.VarChar(8000)
   favicon   String
   createdAt DateTime       @default(now())
   Users     UserInstance[]

@@ -1,10 +1,10 @@
 import { COOKIE_APP_TOKEN } from '$lib/utils/static';
-import type { RequestEvent } from '@sveltejs/kit';
+import { redirect, type RequestEvent } from '@sveltejs/kit';
 import prisma from './prisma';
 
 export async function getLoggedUser(request: RequestEvent) {
 	const token = request.cookies.get(COOKIE_APP_TOKEN);
-	if (!token) return null;
+	if (!token) return logout(request);
 
 	const loggedUser = await prisma.user.findFirst({
 		select: {
@@ -18,7 +18,12 @@ export async function getLoggedUser(request: RequestEvent) {
 			}
 		}
 	});
-	if (!loggedUser) return request.cookies.delete(COOKIE_APP_TOKEN, { path: '/' });
+	if (!loggedUser) return logout(request);
 
 	return loggedUser;
+}
+
+export function logout(request: RequestEvent) {
+	request.cookies.delete(COOKIE_APP_TOKEN, { path: '/' });
+	return redirect(403, '/login');
 }

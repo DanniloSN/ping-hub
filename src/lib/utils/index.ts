@@ -9,11 +9,11 @@ export function cn(...inputs: ClassValue[]) {
 export async function checkUrlResponseTime(url: string) {
 	try {
 		const start = performance.now();
-		await fetch(url).catch(() => {});
+		await fetch(url);
 		const end = performance.now();
 		return Math.round(end - start);
 	} catch (error) {
-		return null;
+		return -1;
 	}
 }
 
