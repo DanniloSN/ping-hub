@@ -8,4 +8,6 @@ interface Instance {
 	name: string;
 	url: string;
 	favicon: string;
+	responseTimeMs: number | null;
+	lastPingAt: Date | null;
 }

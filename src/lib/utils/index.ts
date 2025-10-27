@@ -6,21 +6,21 @@ export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
 
-export async function checkUrlResponseTime(url: string) {
-	try {
-		const start = performance.now();
-		await fetch(url);
-		const end = performance.now();
-		return Math.round(end - start);
-	} catch (error) {
-		return -1;
-	}
-}
-
 export function generateRandomToken() {
 	return Math.random().toString(36).substring(2);
 }
 
 export function extractNumbers(input: string) {
 	return input.replace(/\D/g, '');
+}
+
+export function formatDate(date: Date) {
+	return date.toLocaleDateString('pt-BR', {
+		day: '2-digit',
+		month: '2-digit',
+		year: 'numeric',
+		hour: '2-digit',
+		minute: '2-digit',
+		second: '2-digit'
+	});
 }

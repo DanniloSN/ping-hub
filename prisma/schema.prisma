@@ -34,6 +34,15 @@ model Instance {
   favicon   String
   createdAt DateTime       @default(now())
   Users     UserInstance[]
+  Pings     InstancePing[]
+}
+
+model InstancePing {
+  id             Int      @id @default(autoincrement())
+  Instance       Instance @relation(fields: [instanceId], references: [id])
+  instanceId     Int
+  responseTimeMs Int
+  createdAt      DateTime @default(now())
 }
 
 model UserAccessToken {

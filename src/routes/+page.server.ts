@@ -11,7 +11,15 @@ export async function load(event) {
 			Instance: {
 				select: {
 					url: true,
-					favicon: true
+					favicon: true,
+					Pings: {
+						select: {
+							createdAt: true,
+							responseTimeMs: true
+						},
+						orderBy: { createdAt: 'desc' },
+						take: 1
+					}
 				}
 			}
 		},
@@ -23,7 +31,9 @@ export async function load(event) {
 	const instances = userInstances.map(({ Instance, ...item }) => ({
 		...item,
 		url: Instance.url,
-		favicon: Instance.favicon
+		favicon: Instance.favicon,
+		responseTimeMs: Instance.Pings[0]?.responseTimeMs ?? null,
+		lastPingAt: Instance.Pings[0]?.createdAt ?? null
 	}));
 
 	return { instances };
