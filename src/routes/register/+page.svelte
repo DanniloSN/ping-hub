@@ -5,6 +5,7 @@
 </script>
 
 <form method="POST" class="flex flex-col gap-2">
+	<h1 class="text-lg font-semibold">Criar conta</h1>
 	<input name="name" placeholder="Nome" minlength={MIN_NAME_LENGTH} required />
 	<input name="email" placeholder="Email" type="email" required />
 	<input

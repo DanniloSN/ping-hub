@@ -4,6 +4,7 @@
 </script>
 
 <form method="POST" class="flex flex-col gap-2">
+	<h1 class="text-lg font-semibold">Entrar</h1>
 	<input name="email" placeholder="Email" type="email" required />
 	<input name="password" placeholder="Senha" type="password" required />
 	<Button>Entrar</Button>

@@ -11,30 +11,33 @@
 <svelte:head>
 	<link rel="icon" href={favicon} />
 </svelte:head>
-<nav class="flex items-center justify-between bg-gray-800 px-6 py-4 text-white">
-	<a href="/">
-		<h1 class="text-xl font-bold">Server Hub</h1>
-	</a>
-	<nav class="flex gap-2">
-		<ButtonLink class="flex items-center gap-2" href="/add">
-			<Icon icon="ic:baseline-add" />
-			Adicionar
-		</ButtonLink>
-		{#if data.loggedUser}
-			<form method="POST" action="?/logout">
-				<Button class="flex items-center gap-2">
-					<Icon icon="ic:round-logout" />
-					Sair
-				</Button>
-			</form>
-		{:else}
-			<ButtonLink class="flex items-center gap-2" href="/login">
-				<Icon icon="ic:round-login" />
-				Entrar
+
+<div class="flex h-screen flex-col overflow-hidden">
+	<nav class="flex items-center justify-between bg-gray-800 px-6 py-4 text-white">
+		<a href="/">
+			<h1 class="text-xl font-bold">Server Hub</h1>
+		</a>
+		<nav class="flex gap-2">
+			<ButtonLink class="flex items-center gap-2" href="/add">
+				<Icon icon="ic:baseline-add" />
+				Adicionar
 			</ButtonLink>
-		{/if}
+			{#if data.loggedUser}
+				<form method="POST" action="?/logout">
+					<Button class="flex items-center gap-2">
+						<Icon icon="ic:round-logout" />
+						Sair
+					</Button>
+				</form>
+			{:else}
+				<ButtonLink class="flex items-center gap-2" href="/login">
+					<Icon icon="ic:round-login" />
+					Entrar
+				</ButtonLink>
+			{/if}
+		</nav>
 	</nav>
-</nav>
-<main class="p-6">
-	{@render children?.()}
-</main>
+	<main class="h-full p-6">
+		{@render children?.()}
+	</main>
+</div>

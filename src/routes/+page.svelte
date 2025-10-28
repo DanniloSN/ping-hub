@@ -18,8 +18,16 @@
 	}
 </script>
 
-<div class="grid grid-cols-1 gap-2 md:grid-cols-3">
-	{#each data.instances as instance}
-		<CardItem {instance} {removeItem} />
-	{/each}
-</div>
+{#if !data.instances.length}
+	<p class="flex h-full items-center justify-center text-center">
+		Nenhum servidor adicionado.
+		<br />
+		Clique em "Adicionar" para começar!
+	</p>
+{:else}
+	<div class="grid grid-cols-1 gap-2 md:grid-cols-3">
+		{#each data.instances as instance}
+			<CardItem {instance} {removeItem} />
+		{/each}
+	</div>
+{/if}
