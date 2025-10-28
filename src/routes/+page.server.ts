@@ -1,5 +1,6 @@
 import prisma from '$lib/server/prisma';
 import { getLoggedUser } from '$lib/server/utils.js';
+import type { Actions } from '@sveltejs/kit';
 
 export async function load(event) {
 	const loggedUser = await getLoggedUser(event);
@@ -39,7 +40,7 @@ export async function load(event) {
 	return { instances };
 }
 
-export const actions = {
+export const actions: Actions = {
 	remove: async (event) => {
 		const { url } = await event.request.json();
 		if (!url) throw new Error('Url obrigatória');
