@@ -1,7 +1,10 @@
 <script>
+	import { cn } from '$lib/utils';
 	import { theme } from './theme';
+
+	const { children, ...rest } = $props();
 </script>
 
-<button {...$$restProps} class={theme.button}>
-	<slot />
+<button {...rest} class={cn(theme.button, rest.class)}>
+	{@render children?.()}
 </button>

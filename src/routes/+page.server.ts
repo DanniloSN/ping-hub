@@ -1,9 +1,13 @@
 import prisma from '$lib/server/prisma';
-import { getLoggedUser } from '$lib/server/utils.js';
-import type { Actions } from '@sveltejs/kit';
+import { getLoggedUser, logout } from '$lib/server/utils.js';
+import { type Actions } from '@sveltejs/kit';
 
 export async function load(event) {
-	const loggedUser = await getLoggedUser(event);
+	const loggedUser = await getLoggedUser(event, false);
+
+	if (!loggedUser) {
+		return { instances: [] };
+	}
 
 	const userInstances = await prisma.userInstance.findMany({
 		select: {
@@ -53,5 +57,6 @@ export const actions: Actions = {
 				Instance: { url }
 			}
 		});
-	}
+	},
+	logout
 };

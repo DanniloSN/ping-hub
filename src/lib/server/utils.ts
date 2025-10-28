@@ -2,9 +2,28 @@ import { COOKIE_APP_TOKEN } from '$lib/utils/static';
 import { redirect, type RequestEvent } from '@sveltejs/kit';
 import prisma from './prisma';
 
-export async function getLoggedUser(request: RequestEvent) {
+interface LoggedUser {
+	id: number;
+	name: string;
+	email: string;
+}
+
+export async function getLoggedUser(
+	request: RequestEvent,
+	redirectOnFail?: true
+): Promise<LoggedUser>;
+
+export async function getLoggedUser(
+	request: RequestEvent,
+	redirectOnFail: false
+): Promise<LoggedUser | null>;
+
+export async function getLoggedUser(request: RequestEvent, redirectOnFail = true) {
 	const token = request.cookies.get(COOKIE_APP_TOKEN);
-	if (!token) return logout(request);
+	if (!token) {
+		if (redirectOnFail) return logout(request);
+		return null;
+	}
 
 	const loggedUser = await prisma.user.findFirst({
 		select: {
@@ -18,12 +37,15 @@ export async function getLoggedUser(request: RequestEvent) {
 			}
 		}
 	});
-	if (!loggedUser) return logout(request);
+	if (!loggedUser) {
+		if (redirectOnFail) return logout(request);
+		return null;
+	}
 
 	return loggedUser;
 }
 
 export function logout(request: RequestEvent) {
 	request.cookies.delete(COOKIE_APP_TOKEN, { path: '/' });
-	return redirect(403, '/login');
+	return redirect(302, '/login');
 }
