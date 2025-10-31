@@ -50,14 +50,33 @@ export function logout(request: RequestEvent) {
 	return redirect(302, '/login');
 }
 
-export function createInstance(url: string) {
+export async function createInstance(url: string) {
 	const urlObject = new URL(url);
 	const favicon = `${urlObject.origin}/favicon.ico`;
+
+	const responseTimeMs = await pingUrl(url);
 
 	return prisma.instance.create({
 		data: {
 			url,
-			favicon
+			favicon,
+			Pings: {
+				create: { responseTimeMs }
+			}
 		}
 	});
+}
+
+export async function pingUrl(url: string) {
+	let responseTimeMs = -1;
+
+	try {
+		const start = performance.now();
+		await fetch(url);
+		const end = performance.now();
+
+		responseTimeMs = Math.round(end - start);
+	} catch (error) {}
+
+	return responseTimeMs;
 }

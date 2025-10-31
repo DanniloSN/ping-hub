@@ -1,4 +1,5 @@
 import prisma from '$lib/server/prisma';
+import { pingUrl } from '$lib/server/utils';
 
 export async function POST() {
 	const instances = await prisma.instance.findMany({
@@ -10,15 +11,7 @@ export async function POST() {
 
 	const responseTimes = await Promise.all(
 		instances.map(async (instance) => {
-			let responseTimeMs = -1;
-
-			try {
-				const start = performance.now();
-				await fetch(instance.url);
-				const end = performance.now();
-
-				responseTimeMs = Math.round(end - start);
-			} catch (error) {}
+			const responseTimeMs = await pingUrl(instance.url);
 
 			return {
 				instanceId: instance.id,

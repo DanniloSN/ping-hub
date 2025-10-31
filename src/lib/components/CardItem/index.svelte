@@ -10,9 +10,9 @@
 
 <Card>
 	<div class="flex items-center justify-between">
-		<button class="p-2">
+		<Link href={`/edit/${instance.id}`} class="p-2">
 			<Icon icon="ic:baseline-edit" />
-		</button>
+		</Link>
 		<Link class="flex items-center" href={instance.url} external>
 			<img class="h-5 w-5 object-cover" src={instance.favicon} alt={`${instance.name}'s icon`} />
 			<span class="px-2 text-sm font-semibold">{instance.name}</span>

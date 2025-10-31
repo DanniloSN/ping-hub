@@ -3,7 +3,7 @@
 </script>
 
 <form method="POST" class="flex flex-col gap-2">
-	<h1 class="text-lg font-semibold">Adicionar Servidor</h1>
+	<h1 class="text-lg font-semibold">Adicionar servidor</h1>
 	<input name="name" placeholder="Name" required />
 	<input name="url" placeholder="Url" type="url" required />
 	<Button>Salvar</Button>
