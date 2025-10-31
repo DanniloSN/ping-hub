@@ -1,5 +1,5 @@
 import prisma from '$lib/server/prisma';
-import { getLoggedUser } from '$lib/server/utils';
+import { createInstance, getLoggedUser } from '$lib/server/utils';
 import { redirect } from '@sveltejs/kit';
 import z from 'zod';
 import type { Actions } from './$types';
@@ -22,15 +22,7 @@ export const actions: Actions = {
 		});
 
 		if (!existingInstance) {
-			const urlObject = new URL(url);
-			const favicon = `${urlObject.origin}/favicon.ico`;
-
-			existingInstance = await prisma.instance.create({
-				data: {
-					url,
-					favicon
-				}
-			});
+			existingInstance = await createInstance(url);
 		}
 
 		const existingUserInstance = await prisma.userInstance.findFirst({

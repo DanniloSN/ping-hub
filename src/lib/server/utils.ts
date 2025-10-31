@@ -49,3 +49,15 @@ export function logout(request: RequestEvent) {
 	request.cookies.delete(COOKIE_APP_TOKEN, { path: '/' });
 	return redirect(302, '/login');
 }
+
+export function createInstance(url: string) {
+	const urlObject = new URL(url);
+	const favicon = `${urlObject.origin}/favicon.ico`;
+
+	return prisma.instance.create({
+		data: {
+			url,
+			favicon
+		}
+	});
+}
