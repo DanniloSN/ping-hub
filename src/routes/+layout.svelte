@@ -15,7 +15,7 @@
 <div class="flex h-screen flex-col overflow-hidden">
 	<nav class="flex items-center justify-between bg-gray-800 px-6 py-4 text-white">
 		<a href="/">
-			<h1 class="text-xl font-bold">Pulse Hub</h1>
+			<h1 class="text-xl font-bold">Ping Hub</h1>
 		</a>
 		<nav class="flex gap-2">
 			<ButtonLink class="flex items-center gap-2" href="/add">
