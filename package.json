@@ -1,5 +1,5 @@
 {
-	"name": "server-hub",
+	"name": "pulse-hub",
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
