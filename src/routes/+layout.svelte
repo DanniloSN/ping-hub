@@ -37,7 +37,7 @@
 			{/if}
 		</nav>
 	</nav>
-	<main class="h-full p-6">
+	<main class="h-full bg-slate-200 p-6">
 		{@render children?.()}
 	</main>
 </div>
