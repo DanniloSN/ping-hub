@@ -1,5 +1,6 @@
 import { COOKIE_APP_TOKEN } from '$lib/utils/static';
-import { redirect, type RequestEvent } from '@sveltejs/kit';
+import { fail, isRedirect, redirect, type RequestEvent } from '@sveltejs/kit';
+import z from 'zod';
 import prisma from './prisma';
 
 interface LoggedUser {
@@ -79,4 +80,26 @@ export async function pingUrl(url: string) {
 	} catch (error) {}
 
 	return responseTimeMs;
+}
+
+export function buildCustomError(error: unknown) {
+	const customError = {
+		message: 'Erro desconhecido'
+	};
+
+	switch (true) {
+		case isRedirect(error):
+			return redirect(error.status, error.location);
+		case error instanceof z.ZodError:
+			customError.message = error.issues.map((issue) => issue.message).join(', ');
+			break;
+		case error instanceof Error:
+			customError.message = error.message;
+			break;
+		case typeof error === 'string':
+			customError.message = error;
+			break;
+	}
+
+	return fail(400, customError);
 }

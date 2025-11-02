@@ -10,10 +10,10 @@
 
 <Card>
 	<div class="flex items-center justify-between">
-		<Link href={`/edit/${instance.id}`} class="p-2">
-			<Icon icon="ic:baseline-edit" />
+		<Link href={instance.url} class="-scale-x-100 p-2">
+			<Icon icon="gridicons:external" />
 		</Link>
-		<Link class="flex items-center" href={instance.url} external>
+		<Link class="flex items-center" href={`/edit/${instance.id}`} external>
 			<img class="h-5 w-5 object-cover" src={instance.favicon} alt={`${instance.name}'s icon`} />
 			<span class="px-2 text-sm font-semibold">{instance.name}</span>
 		</Link>

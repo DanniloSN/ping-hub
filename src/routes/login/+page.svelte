@@ -1,6 +1,9 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
 	import ButtonLink from '$lib/components/ButtonLink.svelte';
+	import FormError from '$lib/components/FormError.svelte';
+
+	export let form;
 </script>
 
 <form method="POST" class="flex flex-col gap-2">
@@ -9,4 +12,9 @@
 	<input name="password" placeholder="Senha" type="password" required />
 	<Button>Entrar</Button>
 	<ButtonLink href="/register">Não tenho conta</ButtonLink>
+	{#if form?.message}
+		<FormError>
+			{form.message}
+		</FormError>
+	{/if}
 </form>

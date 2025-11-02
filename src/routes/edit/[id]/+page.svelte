@@ -1,7 +1,8 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
+	import FormError from '$lib/components/FormError.svelte';
 
-	const { data } = $props();
+	const { data, form } = $props();
 	const instance = data.instance;
 </script>
 
@@ -10,4 +11,7 @@
 	<input name="name" placeholder="Name" defaultValue={instance.name} required />
 	<input name="url" placeholder="Url" type="url" defaultValue={instance.url} required />
 	<Button>Salvar</Button>
+	{#if form?.message}
+		<FormError>{form.message}</FormError>
+	{/if}
 </form>
