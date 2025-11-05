@@ -18,7 +18,7 @@ RUN pnpm build
 
 # Run migrations
 ARG DATABASE_URL
-ENV DATABASE_URL=${DATABASE_URL}
+ENV DATABASE_URL=$DATABASE_URL
 RUN pnpm prisma migrate deploy
 
 FROM node:22.20-alpine AS runner
