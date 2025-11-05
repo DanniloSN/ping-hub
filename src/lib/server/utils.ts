@@ -1,3 +1,4 @@
+import { getFavicon } from '$lib/utils';
 import { COOKIE_APP_TOKEN } from '$lib/utils/static';
 import { fail, isRedirect, redirect, type RequestEvent } from '@sveltejs/kit';
 import z from 'zod';
@@ -53,7 +54,7 @@ export function logout(request: RequestEvent) {
 
 export async function createInstance(url: string) {
 	const urlObject = new URL(url);
-	const favicon = `${urlObject.origin}/favicon.ico`;
+	const favicon = await getFavicon(urlObject.origin);
 
 	const responseTimeMs = await pingUrl(url);
 

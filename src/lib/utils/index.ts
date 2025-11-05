@@ -24,3 +24,36 @@ export function formatDate(date: Date) {
 		second: '2-digit'
 	});
 }
+
+export async function getFavicon(url: string) {
+	try {
+		const urlObj = new URL(url);
+		const baseUrl = `${urlObj.protocol}//${urlObj.hostname}`;
+
+		const response = await fetch(url);
+		if (!response.ok) throw new Error('Failed to fetch');
+		const html = await response.text();
+
+		const faviconPatterns = [
+			/<link[^>]*rel=["'](?:shortcut )?icon["'][^>]*href=["']([^"']+)["']/i,
+			/<link[^>]*href=["']([^"']+)["'][^>]*rel=["'](?:shortcut )?icon["']/i,
+			/<link[^>]*rel=["']apple-touch-icon["'][^>]*href=["']([^"']+)["']/i
+		];
+
+		for (const pattern of faviconPatterns) {
+			const match = html.match(pattern);
+			if (match && match[1]) {
+				const faviconUrl = match[1];
+				if (faviconUrl.startsWith('http')) return faviconUrl;
+				if (faviconUrl.startsWith('//')) return `${urlObj.protocol}${faviconUrl}`;
+				if (faviconUrl.startsWith('/')) return `${baseUrl}${faviconUrl}`;
+				return `${baseUrl}/${faviconUrl}`;
+			}
+		}
+
+		throw new Error('Favicon not found in HTML');
+	} catch (error) {
+		const urlObj = new URL(url);
+		return `${urlObj.protocol}//${urlObj.hostname}/favicon.ico`;
+	}
+}
