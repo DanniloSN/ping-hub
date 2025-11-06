@@ -7,7 +7,7 @@
 
 <form method="POST" class="flex flex-col gap-2">
 	<h1 class="text-lg font-semibold">Adicionar servidor</h1>
-	<input name="name" placeholder="Name" required />
+	<input name="name" placeholder="Nome" required />
 	<input name="url" placeholder="Url" type="url" required />
 	<Button>Salvar</Button>
 	{#if form?.message}
