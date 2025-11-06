@@ -23,6 +23,10 @@
 				Adicionar
 			</ButtonLink>
 			{#if data.loggedUser}
+				<ButtonLink class="flex items-center gap-2" href="/settings">
+					<Icon icon="ic:round-settings" />
+					Configurações
+				</ButtonLink>
 				<form method="POST" action="?/logout">
 					<Button class="flex items-center gap-2">
 						<Icon icon="ic:round-logout" />
