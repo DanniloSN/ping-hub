@@ -4,10 +4,10 @@ import { redirect, type Actions } from '@sveltejs/kit';
 import z from 'zod';
 
 export async function load(event) {
-	const { name, email } = await getLoggedUser(event);
+	const { name, email, phone } = await getLoggedUser(event);
 
 	return {
-		user: { name, email }
+		user: { name, email, phone }
 	};
 }
 
@@ -20,7 +20,7 @@ export const actions: Actions = {
 				.object({
 					name: z.string().min(1, 'Nome é obrigatório'),
 					email: z.email('Email inválido'),
-					phone: z.string().length(11)
+					phone: z.string().length(15, 'Telefone inválido')
 				})
 				.parse(Object.fromEntries(formData.entries()));
 

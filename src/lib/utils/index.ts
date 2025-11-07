@@ -57,3 +57,19 @@ export async function getFavicon(url: string) {
 		return `${urlObj.protocol}//${urlObj.hostname}/favicon.ico`;
 	}
 }
+
+export function maskPhone(phone: string) {
+	const onlyNumbers = extractNumbers(phone).slice(0, 13);
+	if (onlyNumbers.length >= 13) {
+		return onlyNumbers.replace(/(\d{2})(\d{2})(\d{5})(\d{4})/, '+$1 ($2) $3-$4');
+	} else if (onlyNumbers.length >= 12) {
+		return onlyNumbers.replace(/(\d{2})(\d{2})(\d{4})(\d{4})/, '+$1 ($2) $3-$4');
+	} else if (onlyNumbers.length >= 11) {
+		return onlyNumbers.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+	} else if (onlyNumbers.length >= 7) {
+		return onlyNumbers.replace(/(\d{2})(\d{5})/, '($1) $2');
+	} else if (onlyNumbers.length >= 2) {
+		return onlyNumbers.replace(/(\d{2})/, '($1');
+	}
+	return onlyNumbers;
+}

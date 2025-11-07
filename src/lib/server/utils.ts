@@ -8,6 +8,7 @@ interface LoggedUser {
 	id: number;
 	name: string;
 	email: string;
+	phone: string;
 }
 
 export async function getLoggedUser(
@@ -31,7 +32,8 @@ export async function getLoggedUser(request: RequestEvent, redirectOnFail = true
 		select: {
 			id: true,
 			name: true,
-			email: true
+			email: true,
+			phone: true
 		},
 		where: {
 			AccessTokens: {
