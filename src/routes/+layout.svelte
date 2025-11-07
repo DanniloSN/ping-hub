@@ -13,35 +13,35 @@
 </svelte:head>
 
 <div class="flex h-screen flex-col overflow-hidden">
-	<nav class="flex items-center justify-between bg-gray-800 px-6 py-4 text-white">
+	<div class="flex items-center justify-between bg-gray-800 px-6 py-4 text-white">
 		<a href="/">
 			<h1 class="text-xl font-bold">Ping Hub</h1>
 		</a>
 		<nav class="flex gap-2">
 			<ButtonLink class="flex items-center gap-2" href="/add">
-				<Icon icon="ic:baseline-add" />
-				Adicionar
+				<Icon class="text-lg" icon="ic:baseline-add" />
+				<span class="hidden md:block">Adicionar</span>
 			</ButtonLink>
 			{#if data.loggedUser}
 				<ButtonLink class="flex items-center gap-2" href="/settings">
-					<Icon icon="ic:round-settings" />
-					Configurações
+					<Icon class="text-lg" icon="ic:round-settings" />
+					<span class="hidden md:block">Configurações</span>
 				</ButtonLink>
 				<form method="POST" action="?/logout">
 					<Button class="flex items-center gap-2">
-						<Icon icon="ic:round-logout" />
-						Sair
+						<Icon class="text-lg" icon="ic:round-logout" />
+						<span class="hidden md:block">Sair</span>
 					</Button>
 				</form>
 			{:else}
 				<ButtonLink class="flex items-center gap-2" href="/login">
-					<Icon icon="ic:round-login" />
-					Entrar
+					<Icon class="text-lg" icon="ic:round-login" />
+					<span class="hidden md:block">Entrar</span>
 				</ButtonLink>
 			{/if}
 		</nav>
-	</nav>
-	<main class="h-full bg-slate-200 p-6">
+	</div>
+	<main class="h-full overflow-auto bg-slate-200 p-4">
 		{@render children?.()}
 	</main>
 </div>
