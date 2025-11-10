@@ -26,7 +26,7 @@
 	</p>
 {:else}
 	<div class="grid grid-cols-1 gap-2 md:grid-cols-3">
-		{#each data.instances as instance}
+		{#each data.instances as instance (instance.url)}
 			<CardItem {instance} {removeItem} />
 		{/each}
 	</div>
