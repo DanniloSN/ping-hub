@@ -40,7 +40,7 @@ model Instance {
 
 model InstancePing {
   id             Int      @id @default(autoincrement())
-  Instance       Instance @relation(fields: [instanceId], references: [id])
+  Instance       Instance @relation(fields: [instanceId], references: [id], onDelete: Cascade)
   instanceId     Int
   responseTimeMs Int
   createdAt      DateTime @default(now())
