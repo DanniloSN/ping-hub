@@ -42,6 +42,8 @@
 		</nav>
 	</div>
 	<main class="h-full overflow-auto bg-slate-200 p-4">
-		{@render children?.()}
+		<div class="h-full w-full md:m-auto md:max-w-3xl">
+			{@render children?.()}
+		</div>
 	</main>
 </div>
