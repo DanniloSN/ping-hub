@@ -58,7 +58,7 @@ export const actions: Actions = {
 					name,
 					email,
 					phone,
-					settings: JSON.stringify(newSettings)
+					settings: newSettings
 				},
 				where: { id }
 			});

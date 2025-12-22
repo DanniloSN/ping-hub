@@ -4,6 +4,7 @@
 	import FormError from '$lib/components/FormError.svelte';
 	import ResponseTimeline from '$lib/components/ResponseTimeline/index.svelte';
 	import { maskPhone } from '$lib/utils/index.js';
+	import { SLOW_RESPONSE_THRESHOLD_MS, TOO_SLOW_RESPONSE_THRESHOLD_MS } from '$lib/utils/static.js';
 
 	const { data, form } = $props();
 	const user = data.user;
@@ -26,7 +27,7 @@
 						/>
 						<p>Resposta lenta</p>
 					</div>
-					<ResponseTimeline responseTimeInMs={200} />
+					<ResponseTimeline responseTimeInMs={SLOW_RESPONSE_THRESHOLD_MS} />
 				</Card>
 			</label>
 			<label for="settingsTooSlowResponse">
@@ -40,7 +41,7 @@
 						/>
 						<p>Resposta muito lenta</p>
 					</div>
-					<ResponseTimeline responseTimeInMs={500} />
+					<ResponseTimeline responseTimeInMs={TOO_SLOW_RESPONSE_THRESHOLD_MS} />
 				</Card>
 			</label>
 			<label for="settingsNoResponse">

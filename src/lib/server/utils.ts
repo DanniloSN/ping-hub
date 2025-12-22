@@ -2,17 +2,17 @@ import { getFavicon } from '$lib/utils';
 import { COOKIE_APP_TOKEN } from '$lib/utils/static';
 import { fail, isRedirect, redirect, type RequestEvent } from '@sveltejs/kit';
 import z from 'zod';
-import prisma from './prisma';
+import prisma, { type Prisma } from './prisma';
 
 interface LoggedUser {
 	id: number;
 	name: string;
 	email: string;
 	phone: string;
-	settings: UserSettingsNotify;
+	settings: UserSettings;
 }
 
-interface UserSettingsNotify {
+export interface UserSettings extends Prisma.JsonObject {
 	slowResponse?: boolean;
 	tooSlowResponse?: boolean;
 	noResponse?: boolean;
@@ -56,7 +56,7 @@ export async function getLoggedUser(request: RequestEvent, redirectOnFail = true
 
 	return {
 		...loggedUser,
-		settings: JSON.parse(String(loggedUser.settings)) as UserSettingsNotify
+		settings: parseUserSettings(loggedUser.settings)
 	};
 }
 
@@ -116,4 +116,19 @@ export function buildCustomError(error: unknown) {
 	}
 
 	return fail(400, customError);
+}
+
+export function parseUserSettings(settings: unknown): UserSettings {
+	if (typeof settings === 'string') {
+		try {
+			return JSON.parse(settings) as UserSettings;
+		} catch (error) {
+			return {};
+		}
+	}
+
+	if (typeof settings === 'object' && settings !== null) {
+		return settings as UserSettings;
+	}
+	return {};
 }
