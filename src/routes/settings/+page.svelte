@@ -11,53 +11,69 @@
 
 <h1 class="text-lg font-semibold">Configurações</h1>
 
-<form action="" class="mt-4 flex flex-col gap-2">
-	<h1 class="text-lg font-semibold">Notificações</h1>
-	<ul class="grid grid-cols-1 gap-2 md:grid-cols-3">
-		<label for="slow">
-			<Card>
-				<div class="flex items-center gap-2">
-					<input id="slow" type="checkbox" />
-					<p>Resposta lenta</p>
-				</div>
-				<ResponseTimeline responseTimeInMs={200} />
-			</Card>
-		</label>
-		<label for="too-slow">
-			<Card>
-				<div class="flex items-center gap-2">
-					<input id="too-slow" type="checkbox" />
-					<p>Resposta muito lenta</p>
-				</div>
-				<ResponseTimeline responseTimeInMs={500} />
-			</Card>
-		</label>
-		<label for="no-response">
-			<Card>
-				<div class="flex items-center gap-2">
-					<input id="no-response" type="checkbox" />
-					<p>Sem resposta</p>
-				</div>
-				<ResponseTimeline responseTimeInMs={null} />
-			</Card>
-		</label>
-	</ul>
-</form>
-
-<form method="POST" class="mt-4 flex flex-col gap-2">
-	<h1 class="text-lg font-semibold">Seus Dados</h1>
-	<input name="name" placeholder="Nome" defaultValue={user.name} required />
-	<input name="email" placeholder="E-mail" type="email" defaultValue={user.email} required />
-	<input
-		name="phone"
-		placeholder="Telefone"
-		defaultvalue={user.phone}
-		maxlength="15"
-		oninput={(event) => (event.currentTarget.value = maskPhone(event.currentTarget.value))}
-		required
-	/>
-	<Button>Salvar</Button>
-	{#if form?.message}
-		<FormError>{form.message}</FormError>
-	{/if}
+<form method="POST">
+	<div class="mt-4 flex flex-col gap-2">
+		<h1 class="text-lg font-semibold">Notificações</h1>
+		<ul class="grid grid-cols-1 gap-2 md:grid-cols-3">
+			<label for="settingsSlowResponse">
+				<Card>
+					<div class="flex items-center gap-2">
+						<input
+							id="settingsSlowResponse"
+							type="checkbox"
+							defaultChecked={user.settings?.slowResponse ?? false}
+							name="settingsSlowResponse"
+						/>
+						<p>Resposta lenta</p>
+					</div>
+					<ResponseTimeline responseTimeInMs={200} />
+				</Card>
+			</label>
+			<label for="settingsTooSlowResponse">
+				<Card>
+					<div class="flex items-center gap-2">
+						<input
+							id="settingsTooSlowResponse"
+							type="checkbox"
+							defaultChecked={user.settings?.tooSlowResponse ?? false}
+							name="settingsTooSlowResponse"
+						/>
+						<p>Resposta muito lenta</p>
+					</div>
+					<ResponseTimeline responseTimeInMs={500} />
+				</Card>
+			</label>
+			<label for="settingsNoResponse">
+				<Card>
+					<div class="flex items-center gap-2">
+						<input
+							id="settingsNoResponse"
+							type="checkbox"
+							defaultChecked={user.settings?.noResponse ?? false}
+							name="settingsNoResponse"
+						/>
+						<p>Sem resposta</p>
+					</div>
+					<ResponseTimeline responseTimeInMs={null} />
+				</Card>
+			</label>
+		</ul>
+	</div>
+	<div class="mt-4 flex flex-col gap-2">
+		<h1 class="text-lg font-semibold">Seus Dados</h1>
+		<input name="name" placeholder="Nome" defaultValue={user.name} required />
+		<input name="email" placeholder="E-mail" type="email" defaultValue={user.email} required />
+		<input
+			name="phone"
+			placeholder="Telefone"
+			defaultvalue={user.phone}
+			maxlength="15"
+			oninput={(event) => (event.currentTarget.value = maskPhone(event.currentTarget.value))}
+			required
+		/>
+		<Button>Salvar</Button>
+		{#if form?.message}
+			<FormError>{form.message}</FormError>
+		{/if}
+	</div>
 </form>

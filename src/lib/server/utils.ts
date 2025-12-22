@@ -9,6 +9,13 @@ interface LoggedUser {
 	name: string;
 	email: string;
 	phone: string;
+	settings: UserSettingsNotify;
+}
+
+interface UserSettingsNotify {
+	slowResponse?: boolean;
+	tooSlowResponse?: boolean;
+	noResponse?: boolean;
 }
 
 export async function getLoggedUser(
@@ -33,7 +40,8 @@ export async function getLoggedUser(request: RequestEvent, redirectOnFail = true
 			id: true,
 			name: true,
 			email: true,
-			phone: true
+			phone: true,
+			settings: true
 		},
 		where: {
 			AccessTokens: {
@@ -46,7 +54,10 @@ export async function getLoggedUser(request: RequestEvent, redirectOnFail = true
 		return null;
 	}
 
-	return loggedUser;
+	return {
+		...loggedUser,
+		settings: JSON.parse(String(loggedUser.settings)) as UserSettingsNotify
+	};
 }
 
 export function logout(request: RequestEvent) {

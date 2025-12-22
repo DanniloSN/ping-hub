@@ -4,10 +4,10 @@ import { redirect, type Actions } from '@sveltejs/kit';
 import z from 'zod';
 
 export async function load(event) {
-	const { name, email, phone } = await getLoggedUser(event);
+	const { name, email, phone, settings } = await getLoggedUser(event);
 
 	return {
-		user: { name, email, phone }
+		user: { name, email, phone, settings }
 	};
 }
 
@@ -16,15 +16,27 @@ export const actions: Actions = {
 		try {
 			const formData = await event.request.formData();
 
-			const { name, email, phone } = z
+			const { name, email, phone, ...formSettings } = z
 				.object({
 					name: z.string().min(1, 'Nome é obrigatório'),
 					email: z.email('Email inválido'),
-					phone: z.string().length(15, 'Telefone inválido')
+					phone: z.string().length(15, 'Telefone inválido'),
+					settingsSlowResponse: z
+						.string()
+						.optional()
+						.transform((val) => val === 'on'),
+					settingsTooSlowResponse: z
+						.string()
+						.optional()
+						.transform((val) => val === 'on'),
+					settingsNoResponse: z
+						.string()
+						.optional()
+						.transform((val) => val === 'on')
 				})
 				.parse(Object.fromEntries(formData.entries()));
 
-			const { id } = await getLoggedUser(event);
+			const { id, settings } = await getLoggedUser(event);
 
 			const existingUserWithEmail = await prisma.user.findFirst({
 				where: {
@@ -35,11 +47,18 @@ export const actions: Actions = {
 
 			if (existingUserWithEmail) throw new Error('E-mail já cadastrado');
 
+			const newSettings = Object.assign({}, settings, {
+				slowResponse: formSettings['settingsSlowResponse'] || false,
+				tooSlowResponse: formSettings['settingsTooSlowResponse'] || false,
+				noResponse: formSettings['settingsNoResponse'] || false
+			});
+
 			await prisma.user.update({
 				data: {
 					name,
 					email,
-					phone
+					phone,
+					settings: JSON.stringify(newSettings)
 				},
 				where: { id }
 			});
