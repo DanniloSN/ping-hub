@@ -1,5 +1,6 @@
 import { getFavicon } from '$lib/utils';
 import { COOKIE_APP_TOKEN } from '$lib/utils/static';
+import type { UserType } from '@prisma/client';
 import { fail, isRedirect, redirect, type RequestEvent } from '@sveltejs/kit';
 import z from 'zod';
 import prisma, { type Prisma } from './prisma';
@@ -10,6 +11,7 @@ interface LoggedUser {
 	email: string;
 	phone: string;
 	settings: UserSettings;
+	type: UserType;
 }
 
 export interface UserSettings extends Prisma.JsonObject {
@@ -41,7 +43,8 @@ export async function getLoggedUser(request: RequestEvent, redirectOnFail = true
 			name: true,
 			email: true,
 			phone: true,
-			settings: true
+			settings: true,
+			type: true
 		},
 		where: {
 			AccessTokens: {
