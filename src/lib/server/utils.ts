@@ -99,6 +99,10 @@ export async function pingUrl(url: string) {
 	return responseTimeMs;
 }
 
+export function buildActionCustomError(error: unknown) {
+	return fail(400, buildCustomError(error));
+}
+
 export function buildCustomError(error: unknown) {
 	const customError = {
 		message: 'Erro desconhecido'
@@ -118,7 +122,7 @@ export function buildCustomError(error: unknown) {
 			break;
 	}
 
-	return fail(400, customError);
+	return customError;
 }
 
 export function parseUserSettings(settings: unknown): UserSettings {
