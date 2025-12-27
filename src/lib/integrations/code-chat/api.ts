@@ -1,57 +1,52 @@
+import axios, { type AxiosInstance } from 'axios';
 import type {
 	CodeChatOptions,
-	CreateInstanceOptions,
+	ConnectionStateResponse,
 	CreateInstanceResponse,
-	FetchInstanceResponse,
 	InstanceConnectResponse,
 	SendTextOptions,
 	SendTextResponse
 } from './types';
 
 export class CodeChat {
+	#axios: AxiosInstance;
 	#instanceName: string;
-	#instanceToken: string;
 
 	constructor(options: CodeChatOptions) {
-		this.#instanceName = options.instanceName || '';
-		this.#instanceToken = options.instanceToken || '';
-	}
-
-	static async createInstance(options: CreateInstanceOptions) {
-		const response = await fetch('instance/create', {
-			method: 'POST',
-			body: JSON.stringify(options)
+		this.#axios = axios.create({
+			baseURL: process.env.WHATSAPP_API_URL || 'http://localhost:8084',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				apiKey: process.env.WHATSAPP_API_KEY || 'zYzP7ocstxh3Sscefew4FZTCu4ehnM8v4hu'
+			}
 		});
-		if (!response.ok) {
-			throw new Error(`Failed to create instance: ${response.statusText}`);
-		}
-		return response.json() as Promise<CreateInstanceResponse>;
+
+		this.#instanceName = options.instanceName;
+		if (options.instanceToken) this.setInstanceToken(options.instanceToken);
 	}
 
-	async fetchInstance() {
-		const response = await fetch(`instance/fetchInstance/${this.#instanceName}`, { method: 'GET' });
-		if (!response.ok) {
-			throw new Error(`Failed to fetch instance: ${response.statusText}`);
-		}
-		return response.json() as Promise<FetchInstanceResponse>;
+	setInstanceToken(instanceToken: string) {
+		this.#axios.defaults.headers.Authorization = `Bearer ${instanceToken}`;
+	}
+
+	async createInstance() {
+		return this.#axios.post<CreateInstanceResponse>('/instance/create', {
+			instanceName: this.#instanceName
+		});
+	}
+
+	async connectionStatus() {
+		return this.#axios.get<ConnectionStateResponse>(
+			`/instance/connectionState/${this.#instanceName}`
+		);
 	}
 
 	async instanceConnect() {
-		const response = await fetch(`instance/connect/${this.#instanceName}`);
-		if (!response.ok) {
-			throw new Error(`Failed to connect to instance: ${response.statusText}`);
-		}
-		return response.json() as Promise<InstanceConnectResponse>;
+		return this.#axios.get<InstanceConnectResponse>(`/instance/connect/${this.#instanceName}`);
 	}
 
 	async sendText(options: SendTextOptions) {
-		const response = await fetch(`message/sendText/${this.#instanceName}`, {
-			method: 'POST',
-			body: JSON.stringify(options)
-		});
-		if (!response.ok) {
-			throw new Error(`Failed to send text message: ${response.statusText}`);
-		}
-		return response.json() as Promise<SendTextResponse>;
+		return this.#axios.post<SendTextResponse>(`/message/sendText/${this.#instanceName}`, options);
 	}
 }

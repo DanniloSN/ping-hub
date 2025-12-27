@@ -73,3 +73,25 @@ export function maskPhone(phone: string) {
 	}
 	return onlyNumbers;
 }
+
+export function formatPhoneToSendMessage(phone: string) {
+	let fixedPhone = extractNumbers(phone);
+
+	if (fixedPhone.startsWith('0')) {
+		fixedPhone = fixedPhone.slice(1);
+	}
+
+	if (fixedPhone.length < 10) {
+		throw new Error('Número de telefone inválido');
+	}
+
+	if (!fixedPhone.startsWith('55')) {
+		fixedPhone = `55${fixedPhone}`;
+	}
+
+	if (fixedPhone.length === 12) {
+		fixedPhone = fixedPhone.slice(0, 4) + '9' + fixedPhone.slice(4);
+	}
+
+	return fixedPhone;
+}

@@ -1,11 +1,6 @@
 export interface CodeChatOptions {
-	instanceName?: string;
-	instanceToken?: string;
-}
-
-export interface CreateInstanceOptions {
 	instanceName: string;
-	description?: string;
+	instanceToken?: string;
 }
 
 export interface CreateInstanceResponse {
@@ -20,23 +15,19 @@ export interface CreateInstanceResponse {
 	};
 }
 
-export interface FetchInstanceResponse {
-	id: number;
-	name: string;
-	description: string | null;
-	connectionStatus: unknown;
-	ownerJid: string;
-	profilePicUrl: string;
-	createdAt: string;
-	updatedAt: string;
-	Webhook: unknown;
-	Whatsapp: {
-		connection: {
-			state: unknown;
+export type ConnectionStateResponse =
+	| {
+			state: 'close';
+			statusReason: 400;
+	  }
+	| {
+			state: 'refused';
+			statusReason: 428;
+	  }
+	| {
+			state: 'open';
 			statusReason: 200;
-		};
-	};
-}
+	  };
 
 export interface InstanceConnectResponse {
 	count: number;

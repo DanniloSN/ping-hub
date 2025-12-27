@@ -107,6 +107,10 @@ export function buildActionCustomError(error: unknown) {
 	return fail(400, buildCustomError(error));
 }
 
+export function buildApiCustomError(error: unknown) {
+	return Response.json(buildCustomError(error), { status: 400 });
+}
+
 export function buildCustomError(error: unknown) {
 	const customError = {
 		message: 'Erro desconhecido'
