@@ -4,10 +4,10 @@ import { redirect, type Actions } from '@sveltejs/kit';
 import z from 'zod';
 
 export async function load(event) {
-	const { name, email, phone, settings } = await getLoggedUser(event);
+	const { name, email, phone, settings, type } = await getLoggedUser(event);
 
 	return {
-		user: { name, email, phone, settings }
+		user: { name, email, phone, settings, type }
 	};
 }
 

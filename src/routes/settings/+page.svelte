@@ -2,6 +2,7 @@
 	import Button from '$lib/components/Button.svelte';
 	import Card from '$lib/components/Card.svelte';
 	import FormError from '$lib/components/FormError.svelte';
+	import Link from '$lib/components/Link.svelte';
 	import ResponseTimeline from '$lib/components/ResponseTimeline/index.svelte';
 	import { maskPhone } from '$lib/utils/index.js';
 	import { SLOW_RESPONSE_THRESHOLD_MS, TOO_SLOW_RESPONSE_THRESHOLD_MS } from '$lib/utils/static.js';
@@ -10,7 +11,12 @@
 	const user = data.user;
 </script>
 
-<h1 class="text-lg font-semibold">Configurações</h1>
+<div class="flex items-baseline gap-2">
+	<h1 class="text-lg font-semibold">Configurações</h1>
+	{#if user.type === 'ADMIN'}
+		<Link href="/admin" class="text-sm text-blue-600">admin</Link>
+	{/if}
+</div>
 
 <form method="POST">
 	<div class="mt-4 flex flex-col gap-2">
