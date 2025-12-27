@@ -12,6 +12,8 @@ interface LoggedUser {
 	phone: string;
 	settings: UserSettings;
 	type: UserType;
+	whatsappApiInstanceName: string;
+	whatsappApiInstanceToken: string;
 }
 
 export interface UserSettings extends Prisma.JsonObject {
@@ -44,7 +46,9 @@ export async function getLoggedUser(request: RequestEvent, redirectOnFail = true
 			email: true,
 			phone: true,
 			settings: true,
-			type: true
+			type: true,
+			whatsappApiInstanceName: true,
+			whatsappApiInstanceToken: true
 		},
 		where: {
 			AccessTokens: {
