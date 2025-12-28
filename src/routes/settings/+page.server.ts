@@ -48,9 +48,9 @@ export const actions: Actions = {
 			if (existingUserWithEmail) throw new Error('E-mail já cadastrado');
 
 			const newSettings = Object.assign({}, settings, {
-				slowResponse: formSettings['settingsSlowResponse'] || false,
-				tooSlowResponse: formSettings['settingsTooSlowResponse'] || false,
-				noResponse: formSettings['settingsNoResponse'] || false
+				slowResponse: formSettings['settingsSlowResponse'] ?? false,
+				tooSlowResponse: formSettings['settingsTooSlowResponse'] ?? false,
+				noResponse: formSettings['settingsNoResponse'] ?? false
 			});
 
 			await prisma.user.update({

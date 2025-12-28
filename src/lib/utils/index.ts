@@ -82,7 +82,7 @@ export function formatPhoneToSendMessage(phone: string) {
 	}
 
 	if (fixedPhone.length < 10) {
-		throw new Error('Número de telefone inválido');
+		throw new Error('Invalid phone number: must contain at least 10 digits');
 	}
 
 	if (!fixedPhone.startsWith('55')) {

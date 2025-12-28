@@ -2,6 +2,7 @@ import { getFavicon } from '$lib/utils';
 import { COOKIE_APP_TOKEN } from '$lib/utils/static';
 import type { UserType } from '@prisma/client';
 import { fail, isRedirect, redirect, type RequestEvent } from '@sveltejs/kit';
+import axios from 'axios';
 import z from 'zod';
 import prisma, { type Prisma } from './prisma';
 
@@ -94,7 +95,7 @@ export async function pingUrl(url: string) {
 
 	try {
 		const start = performance.now();
-		await fetch(url);
+		await axios.head(url, { timeout: 10000 });
 		const end = performance.now();
 
 		responseTimeMs = Math.round(end - start);

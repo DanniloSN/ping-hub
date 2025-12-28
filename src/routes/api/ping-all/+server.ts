@@ -50,11 +50,13 @@ export async function POST() {
 			responseTimeMs
 		});
 
-		instance.Users.flatMap(({ name, User }) => ({
-			instanceName: name,
-			phone: User.phone,
-			settings: parseUserSettings(User.settings)
-		})).forEach(({ settings, ...commonData }) => {
+		instance.Users.forEach(({ name, User }) => {
+			const settings = parseUserSettings(User.settings);
+			const commonData = {
+				instanceName: name,
+				phone: User.phone
+			};
+
 			if (responseTimeMs === -1 && settings.noResponse) {
 				usersToNotify.push({
 					...commonData,
@@ -129,5 +131,5 @@ export async function POST() {
 		}
 	}
 
-	return new Response(JSON.stringify({ sucess: true }));
+	return new Response(JSON.stringify({ success: true }));
 }

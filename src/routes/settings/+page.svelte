@@ -73,7 +73,7 @@
 		<input
 			name="phone"
 			placeholder="Telefone"
-			defaultvalue={user.phone}
+			defaultValue={user.phone}
 			maxlength="15"
 			oninput={(event) => (event.currentTarget.value = maskPhone(event.currentTarget.value))}
 			required

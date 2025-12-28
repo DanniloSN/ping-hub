@@ -18,7 +18,7 @@ export class CodeChat {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json',
-				apiKey: process.env.WHATSAPP_API_KEY || 'zYzP7ocstxh3Sscefew4FZTCu4ehnM8v4hu'
+				apiKey: process.env.WHATSAPP_API_KEY || ''
 			}
 		});
 
