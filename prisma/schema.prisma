@@ -8,15 +8,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserType {
+  ADMIN
+  USER
+}
+
 model User {
-  id           Int               @id @default(autoincrement())
-  name         String
-  email        String            @unique
-  phone        String            @default("")
-  password     String
-  createdAt    DateTime          @default(now())
-  AccessTokens UserAccessToken[]
-  Instances    UserInstance[]
+  id                       Int               @id @default(autoincrement())
+  name                     String
+  email                    String            @unique
+  phone                    String            @default("")
+  password                 String
+  type                     UserType          @default(USER)
+  whatsappApiInstanceName  String            @default("")
+  whatsappApiInstanceToken String            @default("") @db.Text
+  createdAt                DateTime          @default(now())
+  settings                 Json              @default("{}")
+  AccessTokens             UserAccessToken[]
+  Instances                UserInstance[]
 }
 
 model UserInstance {
@@ -40,7 +49,7 @@ model Instance {
 
 model InstancePing {
   id             Int      @id @default(autoincrement())
-  Instance       Instance @relation(fields: [instanceId], references: [id])
+  Instance       Instance @relation(fields: [instanceId], references: [id], onDelete: Cascade)
   instanceId     Int
   responseTimeMs Int
   createdAt      DateTime @default(now())

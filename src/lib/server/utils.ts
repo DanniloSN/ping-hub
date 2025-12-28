@@ -1,14 +1,26 @@
 import { getFavicon } from '$lib/utils';
 import { COOKIE_APP_TOKEN } from '$lib/utils/static';
+import type { UserType } from '@prisma/client';
 import { fail, isRedirect, redirect, type RequestEvent } from '@sveltejs/kit';
+import axios from 'axios';
 import z from 'zod';
-import prisma from './prisma';
+import prisma, { type Prisma } from './prisma';
 
 interface LoggedUser {
 	id: number;
 	name: string;
 	email: string;
 	phone: string;
+	settings: UserSettings;
+	type: UserType;
+	whatsappApiInstanceName: string;
+	whatsappApiInstanceToken: string;
+}
+
+export interface UserSettings extends Prisma.JsonObject {
+	slowResponse?: boolean;
+	tooSlowResponse?: boolean;
+	noResponse?: boolean;
 }
 
 export async function getLoggedUser(
@@ -33,7 +45,11 @@ export async function getLoggedUser(request: RequestEvent, redirectOnFail = true
 			id: true,
 			name: true,
 			email: true,
-			phone: true
+			phone: true,
+			settings: true,
+			type: true,
+			whatsappApiInstanceName: true,
+			whatsappApiInstanceToken: true
 		},
 		where: {
 			AccessTokens: {
@@ -46,7 +62,10 @@ export async function getLoggedUser(request: RequestEvent, redirectOnFail = true
 		return null;
 	}
 
-	return loggedUser;
+	return {
+		...loggedUser,
+		settings: parseUserSettings(loggedUser.settings)
+	};
 }
 
 export function logout(request: RequestEvent) {
@@ -76,13 +95,21 @@ export async function pingUrl(url: string) {
 
 	try {
 		const start = performance.now();
-		await fetch(url);
+		await axios.head(url, { timeout: 10000 });
 		const end = performance.now();
 
 		responseTimeMs = Math.round(end - start);
 	} catch (error) {}
 
 	return responseTimeMs;
+}
+
+export function buildActionCustomError(error: unknown) {
+	return fail(400, buildCustomError(error));
+}
+
+export function buildApiCustomError(error: unknown) {
+	return Response.json(buildCustomError(error), { status: 400 });
 }
 
 export function buildCustomError(error: unknown) {
@@ -104,5 +131,20 @@ export function buildCustomError(error: unknown) {
 			break;
 	}
 
-	return fail(400, customError);
+	return customError;
+}
+
+export function parseUserSettings(settings: unknown): UserSettings {
+	if (typeof settings === 'string') {
+		try {
+			return JSON.parse(settings) as UserSettings;
+		} catch (error) {
+			return {};
+		}
+	}
+
+	if (typeof settings === 'object' && settings !== null) {
+		return settings as UserSettings;
+	}
+	return {};
 }

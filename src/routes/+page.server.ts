@@ -57,6 +57,19 @@ export const actions: Actions = {
 				Instance: { url }
 			}
 		});
+
+		const instanceHasUsers = await prisma.instance.count({
+			where: {
+				url,
+				Users: { some: {} }
+			}
+		});
+
+		if (instanceHasUsers) return;
+
+		await prisma.instance.delete({
+			where: { url }
+		});
 	},
 	logout
 };

@@ -1,5 +1,5 @@
 import prisma from '$lib/server/prisma';
-import { buildCustomError, createInstance, getLoggedUser } from '$lib/server/utils';
+import { buildActionCustomError, createInstance, getLoggedUser } from '$lib/server/utils';
 import { redirect } from '@sveltejs/kit';
 import z from 'zod';
 import type { Actions } from './$types';
@@ -48,7 +48,7 @@ export const actions: Actions = {
 
 			redirect(302, '/');
 		} catch (error) {
-			return buildCustomError(error);
+			return buildActionCustomError(error);
 		}
 	}
 };

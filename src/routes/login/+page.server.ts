@@ -1,5 +1,5 @@
 import prisma from '$lib/server/prisma';
-import { buildCustomError } from '$lib/server/utils';
+import { buildActionCustomError } from '$lib/server/utils';
 import { generateRandomToken } from '$lib/utils';
 import { COOKIE_APP_TOKEN, COOKIE_APP_TOKEN_MAX_AGE_IN_DAYS } from '$lib/utils/static';
 import { redirect, type Actions } from '@sveltejs/kit';
@@ -48,7 +48,7 @@ export const actions: Actions = {
 
 			redirect(302, '/');
 		} catch (error) {
-			return buildCustomError(error);
+			return buildActionCustomError(error);
 		}
 	}
 };
