@@ -4,11 +4,6 @@ import { parseUserSettings, pingUrl } from '$lib/server/utils';
 import { formatPhoneToSendMessage } from '$lib/utils';
 import { SLOW_RESPONSE_THRESHOLD_MS, TOO_SLOW_RESPONSE_THRESHOLD_MS } from '$lib/utils/static';
 
-interface ResponseTime {
-	instanceId: number;
-	responseTimeMs: number;
-}
-
 interface UserToNotify {
 	phone: string;
 	instanceName: string;
@@ -40,17 +35,19 @@ export async function POST() {
 		}
 	});
 
-	const responseTimes: ResponseTime[] = [];
+	const instancesWithResponseTime = await Promise.all(
+		instances.map(async (instance) => {
+			const responseTimeMs = await pingUrl(instance.url);
+			return {
+				...instance,
+				responseTimeMs
+			};
+		})
+	);
+
 	const usersToNotify: UserToNotify[] = [];
-	for (const instance of instances) {
-		const responseTimeMs = await pingUrl(instance.url);
-
-		responseTimes.push({
-			instanceId: instance.id,
-			responseTimeMs
-		});
-
-		instance.Users.forEach(({ name, User }) => {
+	instancesWithResponseTime.forEach(({ Users, responseTimeMs }) => {
+		Users.forEach(({ name, User }) => {
 			const settings = parseUserSettings(User.settings);
 			const commonData = {
 				instanceName: name,
@@ -77,10 +74,13 @@ export async function POST() {
 				});
 			}
 		});
-	}
+	});
 
 	await prisma.instancePing.createMany({
-		data: responseTimes
+		data: instancesWithResponseTime.map(({ id, responseTimeMs }) => ({
+			instanceId: id,
+			responseTimeMs
+		}))
 	});
 
 	if (usersToNotify.length) {
