@@ -15,14 +15,14 @@ export function extractNumbers(input: string) {
 	return input.replace(/\D/g, '');
 }
 
-export function formatDate(date: Date) {
+export function formatDate(date: Date, showTime = true) {
 	return date.toLocaleDateString('pt-BR', {
 		day: '2-digit',
 		month: '2-digit',
 		year: 'numeric',
-		hour: '2-digit',
-		minute: '2-digit',
-		second: '2-digit'
+		hour: showTime ? '2-digit' : undefined,
+		minute: showTime ? '2-digit' : undefined,
+		second: showTime ? '2-digit' : undefined
 	});
 }
 
