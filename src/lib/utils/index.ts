@@ -1,3 +1,4 @@
+import axios from 'axios';
 import type { ClassValue } from 'clsx';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -30,9 +31,9 @@ export async function getFavicon(url: string) {
 		const urlObj = new URL(url);
 		const baseUrl = `${urlObj.protocol}//${urlObj.hostname}`;
 
-		const response = await fetch(url);
-		if (!response.ok) throw new Error('Failed to fetch');
-		const html = await response.text();
+		const response = await axios(url);
+		if (response.status !== 200) throw new Error(`Failed to fetch '${url}' for favicon`);
+		const html = response.data as string;
 
 		const faviconPatterns = [
 			/<link[^>]*rel=["'](?:shortcut )?icon["'][^>]*href=["']([^"']+)["']/i,

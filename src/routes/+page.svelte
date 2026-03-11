@@ -1,16 +1,14 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
-	import CardItem from '$lib/components/CardItem/index.svelte';
+	import CardItem from '$lib/components/CardItem.svelte';
+	import axios from 'axios';
 
 	let { data } = $props();
 
 	async function removeItem(url: string) {
-		const response = await fetch('?/remove', {
-			method: 'POST',
-			body: JSON.stringify({ url })
-		});
+		const response = await axios.post('?/remove', { url });
 
-		if (!response.ok) return alert('Erro ao remover o item');
+		if (response.status !== 200) return alert('Erro ao remover o item');
 
 		await invalidateAll();
 

@@ -1,8 +1,9 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
 	import FormError from '$lib/components/FormError.svelte';
+	import type { PageProps } from './$types';
 
-	export let form;
+	let { form }: PageProps = $props();
 </script>
 
 <form method="POST" class="flex flex-col gap-2">

@@ -3,8 +3,9 @@
 	import ButtonLink from '$lib/components/ButtonLink.svelte';
 	import FormError from '$lib/components/FormError.svelte';
 	import { MIN_NAME_LENGTH, MIN_PASSWORD_LENGTH } from '$lib/utils/static';
+	import type { PageProps } from './$types';
 
-	export let form;
+	let { form }: PageProps = $props();
 </script>
 
 <form method="POST" class="flex flex-col gap-2">

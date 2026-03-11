@@ -1,11 +1,25 @@
 <script lang="ts">
 	import { formatDate } from '$lib/utils';
 	import Icon from '@iconify/svelte';
-	import Card from '../Card.svelte';
-	import Link from '../Link.svelte';
-	import ResponseTimeline from '../ResponseTimeline/index.svelte';
+	import Card from './Card.svelte';
+	import Link from './Link.svelte';
+	import ResponseTimeline from './ResponseTimeline.svelte';
 
-	const { instance, removeItem }: CardItemProps = $props();
+	interface Instance {
+		id: number;
+		name: string;
+		url: string;
+		favicon: string;
+		responseTimeMs: number | null;
+		lastPingAt: Date | null;
+	}
+
+	interface Props {
+		instance: Instance;
+		removeItem: (id: string) => void;
+	}
+
+	const { instance, removeItem }: Props = $props();
 	const responseTimeInMs = instance.responseTimeMs;
 </script>
 

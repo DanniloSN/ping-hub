@@ -1,7 +1,12 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
 	import { SLOW_RESPONSE_THRESHOLD_MS, TOO_SLOW_RESPONSE_THRESHOLD_MS } from '$lib/utils/static';
-	const { responseTimeInMs }: ResponseTimelineProps = $props();
+
+	interface Props {
+		responseTimeInMs: number | null;
+	}
+
+	const { responseTimeInMs }: Props = $props();
 </script>
 
 <div

@@ -36,14 +36,12 @@ export const actions: Actions = {
 
 			if (existingUserInstance) throw new Error('Você já adicionou esta instância');
 
-			await prisma.userInstance.upsert({
-				where: { id: existingUserInstance?.id ?? 0 },
-				create: {
+			await prisma.userInstance.create({
+				data: {
 					name,
 					userId: loggedUser.id,
 					instanceId: existingInstance.id
-				},
-				update: { name }
+				}
 			});
 
 			redirect(302, '/');

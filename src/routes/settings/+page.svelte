@@ -3,9 +3,9 @@
 	import Card from '$lib/components/Card.svelte';
 	import FormError from '$lib/components/FormError.svelte';
 	import Link from '$lib/components/Link.svelte';
-	import ResponseTimeline from '$lib/components/ResponseTimeline/index.svelte';
-	import { maskPhone } from '$lib/utils/index.js';
-	import { SLOW_RESPONSE_THRESHOLD_MS, TOO_SLOW_RESPONSE_THRESHOLD_MS } from '$lib/utils/static.js';
+	import ResponseTimeline from '$lib/components/ResponseTimeline.svelte';
+	import { maskPhone } from '$lib/utils';
+	import { SLOW_RESPONSE_THRESHOLD_MS, TOO_SLOW_RESPONSE_THRESHOLD_MS } from '$lib/utils/static';
 
 	const { data, form } = $props();
 	const user = data.user;
